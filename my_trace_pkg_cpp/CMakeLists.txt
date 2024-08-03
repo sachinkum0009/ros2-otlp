@@ -8,19 +8,12 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 set(opentelemetry-cpp_DIR /home/asus/backup/zzzzz/ros2/acceleration_robotics/trace_ws/dependencies/otel-cpp/lib/cmake/opentelemetry-cpp)
-# find_library(OATPP_LIB NAMES liboatpp.a HINTS "${OATPP_ROOT}/build/src/" NO_DEFAULT_PATH)
-# if (NOT OATPP_LIB)
-#   message(SEND_ERROR "Did not find oatpp library ${OATPP_ROOT}/build/src")
-# endif()
 
 # Use find_package to include OpenTelemetry C++
 find_package(opentelemetry-cpp CONFIG REQUIRED NO_DEFAULT_PATH)
 find_package(Protobuf REQUIRED)
 find_package(CURL REQUIRED)
 find_package(nlohmann_json REQUIRED)
-
-# get_target_property(protobuf_targets Protobuf::Protobuf IMPORTED_GLOBAL)
-# message(STATUS "Protobuf targets: ${protobuf_targets}")
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
@@ -35,14 +28,10 @@ ament_target_dependencies(trace_publisher rclcpp std_msgs)
 # target_link_libraries(trace_publisher
 #                       ${OPENTELEMETRY_CPP_LIBRARIES} Protobuf::libprotobuf CURL::libcurl nlohmann_json::nlohmann_json)
 
-# Check for available Protobuf target
-# get_target_property(protobuf_targets Protobuf::Protobuf IMPORTED_GLOBAL)
-# message(STATUS "Protobuf targets: ${protobuf_targets}")
-
 # Link the appropriate Protobuf target
 target_link_libraries(trace_publisher
                       ${OPENTELEMETRY_CPP_LIBRARIES}
-                      Protobuf::libprotobuf
+                      protobuf::libprotobuf
                       CURL::libcurl
                       nlohmann_json::nlohmann_json)
 
