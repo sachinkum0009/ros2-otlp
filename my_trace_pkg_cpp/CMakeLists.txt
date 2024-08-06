@@ -11,17 +11,12 @@ set(opentelemetry-cpp_DIR /home/asus/backup/zzzzz/ros2/acceleration_robotics/tra
 
 # Use find_package to include OpenTelemetry C++
 find_package(opentelemetry-cpp CONFIG REQUIRED NO_DEFAULT_PATH)
-# find_package(Protobuf REQUIRED)
-# include(FindProtobuf REQUIRED)
-# ament_auto_find_build_dependencies()
 
-find_package(absl REQUIRED)
+# find_package(absl REQUIRED)
 set(protobuf_MODULE_COMPATIBLE TRUE)
 find_package(Protobuf CONFIG REQUIRED)
 set(_PROTOBUF_LIBPROTOBUF protobuf::libprotobuf)
 
-message(STATUS "Protobuf_LIBRARIES: ${Protobuf_LIBRARIES}")
-message(STATUS "Protobuf_INCLUDE_DIRS: ${Protobuf_INCLUDE_DIRS}")
 
 find_package(CURL REQUIRED)
 find_package(nlohmann_json REQUIRED)
@@ -40,18 +35,9 @@ ament_target_dependencies(trace_publisher rclcpp std_msgs)
 # Link all required libraries
 target_link_libraries(trace_publisher
   ${OPENTELEMETRY_CPP_LIBRARIES}
-  # ${Protobuf_LIBRARIES}
-  # protobuf::libprotobuf
-  # CURL::libcurl
-  # nlohmann_json::nlohmann_json
-  -lprotobuf  # Add this line
+  protobuf
 )
 
-# Ensure the include directories are added
-target_include_directories(trace_publisher PRIVATE
-  ${OPENTELEMETRY_CPP_INCLUDE_DIRS}
-  ${Protobuf_INCLUDE_DIRS}
-)
 
 install(DIRECTORY
   launch
