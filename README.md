@@ -23,6 +23,8 @@ colcon build --packages-select my_trace_pkg_cpp
 
 source install/setup.bash
 
+export LD_LIBRARY_PATH=/media/asus/backup/zzzzz/ros2/acceleration_robotics/trace_ws/dependencies/opentelemetry-cpp/build:$LD_LIBRARY_PATH
+
 ros2 launch my_trace_pkg_cpp trace_publisher.launch.py
 ```
 

@@ -11,7 +11,18 @@ set(opentelemetry-cpp_DIR /home/asus/backup/zzzzz/ros2/acceleration_robotics/tra
 
 # Use find_package to include OpenTelemetry C++
 find_package(opentelemetry-cpp CONFIG REQUIRED NO_DEFAULT_PATH)
-find_package(Protobuf REQUIRED)
+# find_package(Protobuf REQUIRED)
+# include(FindProtobuf REQUIRED)
+# ament_auto_find_build_dependencies()
+
+find_package(absl REQUIRED)
+set(protobuf_MODULE_COMPATIBLE TRUE)
+find_package(Protobuf CONFIG REQUIRED)
+set(_PROTOBUF_LIBPROTOBUF protobuf::libprotobuf)
+
+message(STATUS "Protobuf_LIBRARIES: ${Protobuf_LIBRARIES}")
+message(STATUS "Protobuf_INCLUDE_DIRS: ${Protobuf_INCLUDE_DIRS}")
+
 find_package(CURL REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
@@ -25,15 +36,22 @@ find_package(nav_msgs REQUIRED)
 
 add_executable(trace_publisher src/trace_publisher_otlp.cpp)
 ament_target_dependencies(trace_publisher rclcpp std_msgs)
-# target_link_libraries(trace_publisher
-#                       ${OPENTELEMETRY_CPP_LIBRARIES} Protobuf::libprotobuf CURL::libcurl nlohmann_json::nlohmann_json)
 
-# Link the appropriate Protobuf target
+# Link all required libraries
 target_link_libraries(trace_publisher
-                      ${OPENTELEMETRY_CPP_LIBRARIES}
-                      protobuf::libprotobuf
-                      CURL::libcurl
-                      nlohmann_json::nlohmann_json)
+  ${OPENTELEMETRY_CPP_LIBRARIES}
+  # ${Protobuf_LIBRARIES}
+  # protobuf::libprotobuf
+  # CURL::libcurl
+  # nlohmann_json::nlohmann_json
+  -lprotobuf  # Add this line
+)
+
+# Ensure the include directories are added
+target_include_directories(trace_publisher PRIVATE
+  ${OPENTELEMETRY_CPP_INCLUDE_DIRS}
+  ${Protobuf_INCLUDE_DIRS}
+)
 
 install(DIRECTORY
   launch
@@ -46,12 +64,7 @@ install(TARGETS
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
   set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()

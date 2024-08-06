@@ -59,7 +59,7 @@ namespace {
 {
   trace_sdk::BatchSpanProcessorOptions bspOpts{};
   otlp::OtlpHttpExporterOptions opts;
-  resource::ResourceAttributes attributes = {{"service.name", "roll-dice"}};
+  resource::ResourceAttributes attributes = {{"service.name", "trace_publisher"}};
   auto resource = resource::Resource::Create(attributes);
   opts.url = "http://localhost:4318/v1/traces";
   auto exporter  = otlp::OtlpHttpExporterFactory::Create(opts);
