@@ -25,3 +25,13 @@ source install/setup.bash
 
 ros2 launch my_trace_pkg_cpp trace_publisher.launch.py
 ```
+
+## Start Jaeger
+
+```bash
+cd my_trace_pkg_py/jaeger/
+
+docker compose up -d
+
+docker compose down
+```
